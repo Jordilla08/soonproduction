@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary Meta -->
+    <title>SOON Production — Something Out of Nothing</title>
+    <meta name="description" content="SOON Production is a music production and creative services company based in Brooklyn, NY. Original beats, photography, and creative direction. Soul-driven. Sample-influenced. Built on the MPC." />
+    <meta name="keywords" content="SOON Production, beats, music producer, Brooklyn, MPC, soul beats, boom bap, photography, creative direction, beat licensing" />
+    <meta name="author" content="SOON Production" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://soonproduction.com" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://soonproduction.com" />
+    <meta property="og:title" content="SOON Production — Something Out of Nothing" />
+    <meta property="og:description" content="Original beats, photography, and creative direction out of Brooklyn, NY. Soul-driven. Sample-influenced. Built on the MPC." />
+    <meta property="og:image" content="https://soonproduction.com/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="SOON Production" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://soonproduction.com" />
+    <meta name="twitter:title" content="SOON Production — Something Out of Nothing" />
+    <meta name="twitter:description" content="Original beats, photography, and creative direction out of Brooklyn, NY." />
+    <meta name="twitter:image" content="https://soonproduction.com/og-image.jpg" />
+
+    <!-- Theme -->
+    <meta name="theme-color" content="#080806" />
+    <meta name="msapplication-TileColor" content="#080806" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Fonts — preconnect then load -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IM+Fell+English:ital@0;1&family=Courier+Prime:ital@0;1&display=swap"
+    />
+
+    <!-- Global styles — shared across all pages -->
+    <style>
+      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+      :root {
+        --black: #080806;
+        --offwhite: #ddd8cc;
+        --red: #b02a1a;
+        --dust: #7a7060;
+      }
+
+      html { scroll-behavior: smooth; }
+
+      body {
+        background: var(--black);
+        color: var(--offwhite);
+        font-family: 'Courier Prime', monospace;
+        overflow-x: hidden;
+        cursor: crosshair;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* Grain overlay — single instance, globally */
+      body::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+        pointer-events: none;
+        z-index: 9000;
+      }
+
+      a { color: inherit; text-decoration: none; }
+
+      /* Sensible cursor overrides */
+      a, button, [role="button"] { cursor: pointer; }
+      input, textarea, select { cursor: text; }
+
+      /* Selection color */
+      ::selection {
+        background: rgba(176, 42, 26, 0.4);
+        color: var(--offwhite);
+      }
+    </style>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicGroup",
+      "name": "SOON Production",
+      "url": "https://soonproduction.com",
+      "description": "Music production and creative services company based in Brooklyn, NY.",
+      "foundingDate": "2025",
+      "foundingLocation": {
+        "@type": "Place",
+        "name": "Brooklyn, New York"
+      },
+      "genre": ["Soul", "Boom Bap", "Jazz", "Lo-Fi"],
+      "sameAs": [
+        "https://soundcloud.com/soonproduction",
+        "https://instagram.com/soonproduction",
+        "https://beatstars.com/soonproduction"
+      ]
+    }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
