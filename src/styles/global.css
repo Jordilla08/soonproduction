@@ -2,13 +2,7 @@
 /* This replaces the duplicated <style>{css}</style> blocks in every page. */
 /* Include in index.html or import as a CSS file. */
 
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
   --black: #080806;
@@ -20,14 +14,12 @@
   --border: rgba(221, 216, 204, 0.07);
 }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
   background: var(--black);
   color: var(--offwhite);
-  font-family: "Courier Prime", monospace;
+  font-family: 'Courier Prime', monospace;
   overflow-x: hidden;
   cursor: crosshair;
   -webkit-font-smoothing: antialiased;
@@ -36,7 +28,7 @@ body {
 
 /* Grain overlay — single global instance */
 body::after {
-  content: "";
+  content: '';
   position: fixed;
   inset: 0;
   width: 100%;
@@ -46,30 +38,13 @@ body::after {
   z-index: 9000;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-button {
-  font-family: inherit;
-}
-input,
-textarea,
-select {
-  font-family: "Courier Prime", monospace;
-}
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; }
+input, textarea, select { font-family: 'Courier Prime', monospace; }
 
 /* Sensible cursor overrides */
-a,
-button,
-[role="button"] {
-  cursor: pointer;
-}
-input,
-textarea,
-select {
-  cursor: text;
-}
+a, button, [role="button"] { cursor: pointer; }
+input, textarea, select { cursor: text; }
 
 /* Selection color */
 ::selection {
@@ -78,28 +53,20 @@ select {
 }
 
 /* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 3px;
-}
-::-webkit-scrollbar-track {
-  background: var(--black);
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(176, 42, 26, 0.4);
-  border-radius: 2px;
-}
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: rgba(176, 42, 26, 0.4); border-radius: 2px; }
 
 /* Range inputs */
-input[type="range"]::-webkit-slider-thumb {
+input[type=range] {
   -webkit-appearance: none;
-  appearance: none;
   width: 100%;
   height: 2px;
   background: rgba(221, 216, 204, 0.1);
   border-radius: 1px;
   outline: none;
 }
-input[type="range"]::-webkit-slider-thumb {
+input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 12px;
   height: 12px;
@@ -110,28 +77,18 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 /* ── Masonry (Photography page) ── */
-.masonry {
-  columns: 3;
-  column-gap: 8px;
-}
-.masonry-item {
-  break-inside: avoid;
-  margin-bottom: 8px;
-}
+.masonry { columns: 3; column-gap: 8px; }
+.masonry-item { break-inside: avoid; margin-bottom: 8px; }
 
 /* ── RESPONSIVE ─────────────────────────────────────────────────── */
 
 /* Tablet */
 @media (max-width: 1100px) {
-  .masonry {
-    columns: 2;
-  }
+  .masonry { columns: 2; }
 }
 
 @media (max-width: 900px) {
-  .page-layout {
-    grid-template-columns: 1fr !important;
-  }
+  .page-layout { grid-template-columns: 1fr !important; }
   .sidebar {
     position: relative !important;
     top: 0 !important;
@@ -140,155 +97,55 @@ input[type="range"]::-webkit-slider-thumb {
     border-bottom: 1px solid rgba(221, 216, 204, 0.06) !important;
     padding: 24px 20px !important;
   }
-  .beats-main {
-    padding: 24px 20px !important;
-  }
-  .beat-card-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
-  .modal-tiers {
-    grid-template-columns: 1fr !important;
-  }
-  .grid-about {
-    grid-template-columns: 1fr !important;
-    gap: 40px !important;
-  }
-  .grid-services {
-    grid-template-columns: 1fr !important;
-  }
-  .beats-header {
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 16px !important;
-  }
-  .hero-bottom {
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 12px !important;
-  }
-  .contact-grid {
-    grid-template-columns: 1fr !important;
-  }
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
-  .credits-grid {
-    grid-template-columns: 1fr !important;
-  }
-  .featured-pair {
-    grid-template-columns: 1fr !important;
-  }
-  .featured-grid {
-    grid-template-columns: 1fr !important;
-  }
+  .beats-main { padding: 24px 20px !important; }
+  .beat-card-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .modal-tiers { grid-template-columns: 1fr !important; }
+  .grid-about { grid-template-columns: 1fr !important; gap: 40px !important; }
+  .grid-services { grid-template-columns: 1fr !important; }
+  .beats-header { flex-direction: column !important; align-items: flex-start !important; gap: 16px !important; }
+  .hero-bottom { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+  .contact-grid { grid-template-columns: 1fr !important; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .credits-grid { grid-template-columns: 1fr !important; }
+  .featured-pair { grid-template-columns: 1fr !important; }
+  .featured-grid { grid-template-columns: 1fr !important; }
 }
 
 /* Mobile */
 @media (max-width: 768px) {
-  .section-pad {
-    padding: 72px 20px !important;
-  }
-  .page-pad {
-    padding-left: 20px !important;
-    padding-right: 20px !important;
-  }
-  .desktop-nav,
-  .nav-links {
-    display: none !important;
-  }
-  .hamburger {
-    display: flex !important;
-  }
-  .hero-title {
-    font-size: clamp(52px, 14vw, 90px) !important;
-  }
-  .beats-grid-wrap {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
-  .photo-grid-inner {
-    grid-template-columns: 1fr 1fr !important;
-    grid-template-rows: auto !important;
-  }
-  .photo-grid-inner > div:first-child {
-    grid-row: auto !important;
-    aspect-ratio: 1/1 !important;
-    grid-column: 1/3 !important;
-  }
-  .about-record-box {
-    max-width: 280px !important;
-  }
-  .modal-inner {
-    padding: 28px 20px 24px !important;
-  }
-  .player-bar {
-    flex-wrap: wrap !important;
-    padding: 12px 16px !important;
-    gap: 10px !important;
-  }
-  .player-waveform {
-    order: 10 !important;
-    flex-basis: 100% !important;
-  }
-  .player-time {
-    display: none !important;
-  }
-  .player-license {
-    display: none !important;
-  }
-  .loader-vinyl {
-    width: 200px !important;
-    height: 200px !important;
-  }
-  .loader-vinyl svg {
-    width: 200px !important;
-    height: 200px !important;
-  }
-  .service-card-inner {
-    padding: 28px 20px 24px !important;
-  }
-  .contact-pills {
-    gap: 6px !important;
-  }
-  .contact-pills button {
-    padding: 5px 12px !important;
-  }
-  .hero-featured {
-    height: 60vh !important;
-  }
-  .lightbox-panel {
-    width: 100% !important;
-    border-left: none !important;
-    border-top: 1px solid rgba(221, 216, 204, 0.08) !important;
-  }
-  .lightbox-inner {
-    flex-direction: column !important;
-  }
-  .lightbox-img {
-    height: 55vh !important;
-  }
-  .hero-stats {
-    flex-direction: column !important;
-    align-items: flex-start !important;
-  }
+  .section-pad { padding: 72px 20px !important; }
+  .page-pad { padding-left: 20px !important; padding-right: 20px !important; }
+  .desktop-nav, .nav-links { display: none !important; }
+  .hamburger { display: flex !important; }
+  .hero-title { font-size: clamp(52px, 14vw, 90px) !important; }
+  .beats-grid-wrap { grid-template-columns: repeat(2, 1fr) !important; }
+  .photo-grid-inner { grid-template-columns: 1fr 1fr !important; grid-template-rows: auto !important; }
+  .photo-grid-inner > div:first-child { grid-row: auto !important; aspect-ratio: 1/1 !important; grid-column: 1/3 !important; }
+  .about-record-box { max-width: 280px !important; }
+  .modal-inner { padding: 28px 20px 24px !important; }
+  .player-bar { flex-wrap: wrap !important; padding: 12px 16px !important; gap: 10px !important; }
+  .player-waveform { order: 10 !important; flex-basis: 100% !important; }
+  .player-time { display: none !important; }
+  .player-license { display: none !important; }
+  .loader-vinyl { width: 200px !important; height: 200px !important; }
+  .loader-vinyl svg { width: 200px !important; height: 200px !important; }
+  .service-card-inner { padding: 28px 20px 24px !important; }
+  .contact-pills { gap: 6px !important; }
+  .contact-pills button { padding: 5px 12px !important; }
+  .hero-featured { height: 60vh !important; }
+  .lightbox-panel { width: 100% !important; border-left: none !important; border-top: 1px solid rgba(221, 216, 204, 0.08) !important; }
+  .lightbox-inner { flex-direction: column !important; }
+  .lightbox-img { height: 55vh !important; }
+  .hero-stats { flex-direction: column !important; align-items: flex-start !important; }
 }
 
 @media (max-width: 540px) {
-  .beat-card-grid {
-    grid-template-columns: 1fr !important;
-  }
+  .beat-card-grid { grid-template-columns: 1fr !important; }
 }
 
 @media (max-width: 480px) {
-  .beats-grid-wrap {
-    grid-template-columns: 1fr !important;
-  }
-  .masonry {
-    columns: 1;
-  }
-  .photo-grid-inner {
-    grid-template-columns: 1fr !important;
-  }
-  .photo-grid-inner > div:first-child {
-    grid-column: auto !important;
-  }
+  .beats-grid-wrap { grid-template-columns: 1fr !important; }
+  .masonry { columns: 1; }
+  .photo-grid-inner { grid-template-columns: 1fr !important; }
+  .photo-grid-inner > div:first-child { grid-column: auto !important; }
 }
