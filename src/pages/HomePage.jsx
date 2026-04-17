@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from “react”;
 import { motion, AnimatePresence } from “framer-motion”;
-import { useAudio } from “../hooks/useAudio.js”
-import Loader from “../components/Loader.jsx”
 
 /* ═══════════════════════════════════════════════════════════════════════
 SOON Production — Redesigned Homepage Preview
@@ -31,6 +29,40 @@ const PHOTOS = [
 ];
 
 // ── CSS ──────────────────────────────────────────────────────────────
+const styles = `
+@import url(‘https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IM+Fell+English:ital@0;1&family=Courier+Prime:ital@0;1&display=swap’);
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root { –black:#080806; –offwhite:#ddd8cc; –red:#b02a1a; –dust:#7a7060; }
+body { background:var(–black); color:var(–offwhite); font-family:‘Courier Prime’,monospace; overflow-x:hidden; }
+body::after {
+content:’’; position:fixed; inset:0; width:100%; height:100%;
+background-image:url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘200’ height=‘200’%3E%3Cfilter id=‘n’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.85’ numOctaves=‘3’ stitchTiles=‘stitch’/%3E%3C/filter%3E%3Crect width=‘200’ height=‘200’ filter=‘url(%23n)’ opacity=‘0.06’/%3E%3C/svg%3E”);
+pointer-events:none; z-index:9000;
+}
+::selection { background:rgba(176,42,26,0.4); color:var(–offwhite); }
+a { color:inherit; text-decoration:none; }
+button { font-family:inherit; cursor:pointer; }
+input { font-family:‘Courier Prime’,monospace; }
+::-webkit-scrollbar { width:3px; }
+::-webkit-scrollbar-track { background:var(–black); }
+::-webkit-scrollbar-thumb { background:rgba(176,42,26,0.4); border-radius:2px; }
+
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+@keyframes slideIn { from{transform:translateX(100%)} to{transform:translateX(0)} }
+
+@media(max-width:768px) {
+.hero-title { font-size:clamp(48px,14vw,80px) !important; }
+.beats-preview-grid { grid-template-columns:1fr !important; }
+.photo-strip { grid-template-columns:repeat(3,1fr) !important; }
+.cta-row { flex-direction:column !important; }
+.email-box { flex-direction:column !important; }
+.footer-inner { flex-direction:column !important; gap:16px !important; }
+}
+@media(max-width:480px) {
+.photo-strip { grid-template-columns:repeat(2,1fr) !important; }
+}
+`;
+
 // ── REVEAL ───────────────────────────────────────────────────────────
 const Reveal = ({ children, delay = 0 }) => (
 <motion.div
@@ -78,6 +110,84 @@ transition={playing ? { duration: 0.5 + Math.random() * 0.4, repeat: Infinity, e
 })}
 </div>
 );
+};
+
+// ── AUDIO ENGINE (HTML5 Audio API) ───────────────────────────────────
+const useAudioPlayer = () => {
+const audioRef = useRef(null);
+const [current, setCurrent] = useState(null);
+const [playing, setPlaying] = useState(false);
+const [progress, setProgress] = useState(0);
+const [duration, setDuration] = useState(0);
+const rafRef = useRef(null);
+
+useEffect(() => {
+if (!audioRef.current) {
+audioRef.current = new Audio();
+audioRef.current.volume = 0.7;
+audioRef.current.addEventListener(“loadedmetadata”, () => {
+setDuration(audioRef.current.duration);
+});
+audioRef.current.addEventListener(“ended”, () => {
+setPlaying(false);
+setProgress(0);
+});
+}
+return () => {
+if (audioRef.current) {
+audioRef.current.pause();
+audioRef.current.src = “”;
+}
+cancelAnimationFrame(rafRef.current);
+};
+}, []);
+
+const updateProgress = useCallback(() => {
+if (audioRef.current && audioRef.current.duration) {
+setProgress(audioRef.current.currentTime / audioRef.current.duration);
+}
+rafRef.current = requestAnimationFrame(updateProgress);
+}, []);
+
+const play = useCallback((beat) => {
+const audio = audioRef.current;
+if (current?.num === beat.num) {
+if (playing) { audio.pause(); setPlaying(false); cancelAnimationFrame(rafRef.current); }
+else { audio.play().catch(() => {}); setPlaying(true); rafRef.current = requestAnimationFrame(updateProgress); }
+return;
+}
+audio.pause();
+cancelAnimationFrame(rafRef.current);
+audio.src = beat.src;
+audio.load();
+audio.play().catch(() => {});
+setCurrent(beat);
+setPlaying(true);
+setProgress(0);
+rafRef.current = requestAnimationFrame(updateProgress);
+}, [current, playing, updateProgress]);
+
+const seek = useCallback((pct) => {
+if (audioRef.current && audioRef.current.duration) {
+audioRef.current.currentTime = pct * audioRef.current.duration;
+setProgress(pct);
+}
+}, []);
+
+const stop = useCallback(() => {
+audioRef.current?.pause();
+setPlaying(false);
+setCurrent(null);
+setProgress(0);
+cancelAnimationFrame(rafRef.current);
+}, []);
+
+const formatTime = (s) => {
+if (!s || isNaN(s)) return “0:00”;
+return `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+};
+
+return { current, playing, progress, duration, play, seek, stop, formatTime };
 };
 
 // ── LATEST DROP BADGE ────────────────────────────────────────────────
@@ -352,14 +462,14 @@ const SectionLabel = ({ index, label }) => (
 // ══════════════════════════════════════════════════════════════════════
 // MAIN APP
 // ══════════════════════════════════════════════════════════════════════
-export default function HomePage() {
-const [loaded, setLoaded] = useState(false);
-const audio = useAudio();
+export default function App() {
+const audio = useAudioPlayer();
 const [showDrop, setShowDrop] = useState(true);
 const newBeat = BEATS.find(b => b.isNew);
 
 return (
 <>
+<style>{styles}</style>
 
 ```
   {/* ── LATEST DROP BADGE ── */}
