@@ -15,6 +15,45 @@ Redesigned as a visual documentary timeline:
 - Scroll-driven animations throughout
   */
 
+const styles = `
+@import url(‘https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IM+Fell+English:ital@0;1&family=Courier+Prime:ital@0;1&display=swap’);
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root { –black:#080806; –offwhite:#ddd8cc; –red:#b02a1a; –dust:#7a7060; }
+body { background:var(–black); color:var(–offwhite); font-family:‘Courier Prime’,monospace; overflow-x:hidden; }
+body::after {
+content:’’; position:fixed; inset:0;
+background-image:url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘200’ height=‘200’%3E%3Cfilter id=‘n’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.85’ numOctaves=‘3’ stitchTiles=‘stitch’/%3E%3C/filter%3E%3Crect width=‘200’ height=‘200’ filter=‘url(%23n)’ opacity=‘0.06’/%3E%3C/svg%3E”);
+pointer-events:none; z-index:9000;
+}
+::selection { background:rgba(176,42,26,0.4); }
+a { color:inherit; text-decoration:none; }
+button { font-family:inherit; cursor:pointer; }
+::-webkit-scrollbar { width:3px; }
+::-webkit-scrollbar-track { background:var(–black); }
+::-webkit-scrollbar-thumb { background:rgba(176,42,26,0.4); border-radius:2px; }
+
+.timeline-line { position:absolute; left:24px; top:0; bottom:0; width:1px; background:rgba(221,216,204,0.06); }
+.reader-body p { font-size:clamp(14px,1.8vw,16px); color:var(–dust); line-height:2.1; letter-spacing:0.02em; margin-bottom:24px; }
+.reader-body p:first-child::first-letter {
+font-family:‘IM Fell English’,serif; font-size:3.2em; float:left;
+line-height:0.8; margin-right:10px; margin-top:6px; color:var(–red);
+}
+.filmstrip { display:flex; gap:8px; overflow-x:auto; padding-bottom:8px; scroll-snap-type:x mandatory; -ms-overflow-style:none; scrollbar-width:none; }
+.filmstrip::-webkit-scrollbar { display:none; }
+.filmstrip-item { scroll-snap-align:start; flex-shrink:0; }
+
+@media(max-width:900px) {
+.entry-layout { grid-template-columns:1fr !important; }
+.entry-sidebar { position:relative !important; top:0 !important; border-left:none !important; padding-left:0 !important; border-top:1px solid rgba(221,216,204,0.06); padding-top:32px !important; }
+}
+@media(max-width:640px) {
+.timeline-line { left:16px; }
+.page-pad { padding-left:20px !important; padding-right:20px !important; }
+.featured-grid { grid-template-columns:1fr !important; }
+.cta-grid { grid-template-columns:1fr !important; }
+}
+`;
+
 // ── DATA ──────────────────────────────────────────────────────────────
 const TAGS = [“All”, “Studio”, “MPC”, “Shoot”, “On Location”, “Session”, “Process”];
 
@@ -534,7 +573,7 @@ zIndex: 820, width: progressWidth,
 // ══════════════════════════════════════════════════════════════════════
 // MAIN PAGE
 // ══════════════════════════════════════════════════════════════════════
-export default function JournalPage() {
+export default function App() {
 const [activeTag, setActiveTag] = useState(“All”);
 const [openEntry, setOpenEntry] = useState(null);
 
@@ -549,6 +588,7 @@ setTimeout(() => setOpenEntry(entry), 100);
 
 return (
 <>
+<style>{styles}</style>
 
 ```
   {/* ── PAGE HEADER ── */}
