@@ -4,10 +4,11 @@
 // Run:  npm run generate-data
 // ─────────────────────────────────────────────────────────────────────
 
-import fs   from ‘fs’
-import path from ‘path’
-import { parseFile } from ‘music-metadata’
-import exifr from ‘exifr’
+import fs from "fs"
+import path from "path"
+import { parseFile } from "music-metadata"
+import exifr from "exifr"
+
 
 const BEATS_INPUT   = ‘./content/beats’
 const PHOTOS_INPUT  = ‘./content/photos’
