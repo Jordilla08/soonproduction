@@ -336,7 +336,7 @@ const SectionLabel = ({ index, label }) => (
 // MAIN APP
 // ══════════════════════════════════════════════════════════════════════
 export default function HomePage() {
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(sessionStorage.getItem("soon-loaded") === "true");
   const audio = useAudio();
   const [showDrop, setShowDrop] = useState(true);
   const newBeat = BEATS.find(b => b.isNew);
