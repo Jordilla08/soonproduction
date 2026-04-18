@@ -341,11 +341,14 @@ export default function HomePage() {
   const [showDrop, setShowDrop] = useState(true);
   const newBeat = BEATS.find(b => b.isNew);
 
-  return (
+    return (
     <>
-      
+      <AnimatePresence>
+        {!loaded && <Loader key="loader" onDone={() => setLoaded(true)} />}
+      </AnimatePresence>
 
       {/* ── LATEST DROP BADGE ── */}
+
       <AnimatePresence>
         {showDrop && newBeat && !audio.current && (
           <motion.div key="drop" exit={{ opacity: 0, x: 40 }}>
