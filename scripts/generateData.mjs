@@ -4,195 +4,191 @@
 // Run:  npm run generate-data
 // ─────────────────────────────────────────────────────────────────────
 
-import fs   from ‘fs’
-import path from ‘path’
-import { parseFile } from ‘music-metadata’
-import exifr from ‘exifr’
+import fs   from 'fs'
+import path from 'path'
+import { parseFile } from 'music-metadata'
+import exifr from 'exifr'
 
-const BEATS_INPUT   = ‘./content/beats’
-const PHOTOS_INPUT  = ‘./content/photos’
-const BEATS_OUTPUT  = ‘./src/data/beats.js’
-const PHOTOS_OUTPUT = ‘./src/data/photos.js’
-const SILENT = process.argv.includes(’–silent’)
+const BEATS_INPUT   = './content/beats'
+const PHOTOS_INPUT  = './content/photos'
+const BEATS_OUTPUT  = './src/data/beats.js'
+const PHOTOS_OUTPUT = './src/data/photos.js'
+const SILENT = process.argv.includes('--silent')
 
-const log = (…args) => { if (!SILENT) console.log(…args) }
+const log = (...args) => { if (!SILENT) console.log(...args) }
 
 const ensureDir = (dir) => {
-if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
 }
 
 const filenameToTitle = (file) =>
-path.basename(file, path.extname(file))
-.replace(/^\d+-/, ‘’)
-.replace(/-/g, ’ ’)
-.replace(/\b\w/g, c => c.toUpperCase())
+  path.basename(file, path.extname(file))
+    .replace(/^\d+-/, '')
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, c => c.toUpperCase())
 
-const formatAperture = (val) => val ? `f/${val}` : ‘Unknown’
+const formatAperture = (val) => val ? `f/${val}` : 'Unknown'
 
 const formatShutter = (val) => {
-if (!val) return ‘Unknown’
-return val >= 1 ? `${val}s` : `1/${Math.round(1 / val)}s`
+  if (!val) return 'Unknown'
+  return val >= 1 ? `${val}s` : `1/${Math.round(1 / val)}s`
 }
 
 const formatDate = (date) => {
-if (!date) return ‘Unknown’
-return new Date(date).toLocaleDateString(‘en-US’, { month: ‘long’, year: ‘numeric’ })
+  if (!date) return 'Unknown'
+  return new Date(date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
 }
 
-const AUDIO_EXTS = new Set([’.mp3’, ‘.wav’, ‘.aiff’, ‘.flac’])
-const IMAGE_EXTS = new Set([’.jpg’, ‘.jpeg’, ‘.png’, ‘.webp’])
+const AUDIO_EXTS = new Set(['.mp3', '.wav', '.aiff', '.flac'])
+const IMAGE_EXTS = new Set(['.jpg', '.jpeg', '.png', '.webp'])
 
 // ── Process beats ─────────────────────────────────────────────────────
 const processBeats = async () => {
-ensureDir(BEATS_INPUT)
-ensureDir(’./src/data’)
+  ensureDir(BEATS_INPUT)
+  ensureDir('./src/data')
 
-const files = fs.readdirSync(BEATS_INPUT)
-.filter(f => AUDIO_EXTS.has(path.extname(f).toLowerCase()))
-.sort()
+  const files = fs.readdirSync(BEATS_INPUT)
+    .filter(f => AUDIO_EXTS.has(path.extname(f).toLowerCase()))
+    .sort()
 
-if (!files.length) {
-log(’  No beat files found in /content/beats/’)
-return []
-}
+  if (!files.length) {
+    log('  No beat files found in /content/beats/')
+    return []
+  }
 
-const beats = []
+  const beats = []
 
-for (let i = 0; i < files.length; i++) {
-const file = files[i]
-const filePath = path.join(BEATS_INPUT, file)
-log(`  Processing beat: ${file}`)
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i]
+    const filePath = path.join(BEATS_INPUT, file)
+    log(`  Processing beat: ${file}`)
 
-```
-try {
-  const meta   = await parseFile(filePath, { duration: true })
-  const tags   = meta.common
-  const format = meta.format
-  const num    = String(i + 1).padStart(3, '0')
-  const dur    = format.duration
-    ? `${Math.floor(format.duration / 60)}:${String(Math.floor(format.duration % 60)).padStart(2, '0')}`
-    : 'Unknown'
+    try {
+      const meta   = await parseFile(filePath, { duration: true })
+      const tags   = meta.common
+      const format = meta.format
+      const num    = String(i + 1).padStart(3, '0')
+      const dur    = format.duration
+        ? `${Math.floor(format.duration / 60)}:${String(Math.floor(format.duration % 60)).padStart(2, '0')}`
+        : 'Unknown'
 
-  beats.push({
-    num,
-    title:    tags.title || filenameToTitle(file),
-    genre:    tags.genre?.[0] || 'Unknown',
-    subgenre: tags.genre?.[0] || 'Unknown',
-    bpm:      tags.bpm ? Math.round(tags.bpm) : 0,
-    key:      tags.initialkey || 'Unknown',
-    mood:     tags.comment?.text?.[0] || 'Unknown',
-    duration: dur,
-    price:    35,
-    tags:     tags.genre || [],
-    src:      `/beats/${file}`,
-    sample:   null,
-  })
-} catch (err) {
-  console.error(`  Error reading ${file}:`, err.message)
-}
-```
+      beats.push({
+        num,
+        title:    tags.title || filenameToTitle(file),
+        genre:    tags.genre?.[0] || 'Unknown',
+        subgenre: tags.genre?.[0] || 'Unknown',
+        bpm:      tags.bpm ? Math.round(tags.bpm) : 0,
+        key:      tags.initialkey || 'Unknown',
+        mood:     tags.comment?.text?.[0] || 'Unknown',
+        duration: dur,
+        price:    35,
+        tags:     tags.genre || [],
+        src:      `/beats/${file}`,
+        sample:   null,
+      })
+    } catch (err) {
+      console.error(`  Error reading ${file}:`, err.message)
+    }
+  }
 
-}
-
-return beats
+  return beats
 }
 
 // ── Process photos ────────────────────────────────────────────────────
 const processPhotos = async () => {
-ensureDir(PHOTOS_INPUT)
-ensureDir(’./src/data’)
+  ensureDir(PHOTOS_INPUT)
+  ensureDir('./src/data')
 
-const files = fs.readdirSync(PHOTOS_INPUT)
-.filter(f => IMAGE_EXTS.has(path.extname(f).toLowerCase()))
-.sort()
+  const files = fs.readdirSync(PHOTOS_INPUT)
+    .filter(f => IMAGE_EXTS.has(path.extname(f).toLowerCase()))
+    .sort()
 
-if (!files.length) {
-log(’  No photo files found in /content/photos/’)
-return []
-}
+  if (!files.length) {
+    log('  No photo files found in /content/photos/')
+    return []
+  }
 
-const photos = []
+  const photos = []
 
-for (let i = 0; i < files.length; i++) {
-const file = files[i]
-const filePath = path.join(PHOTOS_INPUT, file)
-log(`  Processing photo: ${file}`)
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i]
+    const filePath = path.join(PHOTOS_INPUT, file)
+    log(`  Processing photo: ${file}`)
 
-```
-try {
-  const exif = await exifr.parse(filePath, {
-    tiff: true, exif: true, gps: true,
-    pick: ['Make', 'Model', 'LensModel', 'FNumber', 'ExposureTime', 'ISO', 'DateTimeOriginal'],
-  }).catch(() => null)
+    try {
+      const exif = await exifr.parse(filePath, {
+        tiff: true, exif: true, gps: true,
+        pick: ['Make', 'Model', 'LensModel', 'FNumber', 'ExposureTime', 'ISO', 'DateTimeOriginal'],
+      }).catch(() => null)
 
-  photos.push({
-    id:          `p${String(i + 1).padStart(3, '0')}`,
-    title:       filenameToTitle(file),
-    category:    'Uncategorized',
-    camera:      exif?.Model ? `${exif.Make || ''} ${exif.Model}`.trim() : 'Sony A7III',
-    lens:        exif?.LensModel || '24-70mm GM II',
-    aperture:    formatAperture(exif?.FNumber),
-    shutter:     formatShutter(exif?.ExposureTime),
-    iso:         exif?.ISO ? String(exif.ISO) : 'Unknown',
-    date:        formatDate(exif?.DateTimeOriginal),
-    location:    'Brooklyn, NY',
-    featured:    i === 0,
-    description: '',
-    src:         `/photos/${file}`,
-    colors:      ['#0e0c08', '#141208', '#080806'],
-  })
-} catch (err) {
-  console.error(`  Error reading ${file}:`, err.message)
-}
-```
+      photos.push({
+        id:          `p${String(i + 1).padStart(3, '0')}`,
+        title:       filenameToTitle(file),
+        category:    'Uncategorized',
+        camera:      exif?.Model ? `${exif.Make || ''} ${exif.Model}`.trim() : 'Sony A7III',
+        lens:        exif?.LensModel || '24-70mm GM II',
+        aperture:    formatAperture(exif?.FNumber),
+        shutter:     formatShutter(exif?.ExposureTime),
+        iso:         exif?.ISO ? String(exif.ISO) : 'Unknown',
+        date:        formatDate(exif?.DateTimeOriginal),
+        location:    'Brooklyn, NY',
+        featured:    i === 0,
+        description: '',
+        src:         `/photos/${file}`,
+        colors:      ['#0e0c08', '#141208', '#080806'],
+      })
+    } catch (err) {
+      console.error(`  Error reading ${file}:`, err.message)
+    }
+  }
 
-}
-
-return photos
+  return photos
 }
 
 // ── Write output ──────────────────────────────────────────────────────
 const writeDataFile = (outputPath, varName, data) => {
-const content = `// Auto-generated by scripts/generateData.mjs
+  const content = `// Auto-generated by scripts/generateData.mjs
 // Last updated: ${new Date().toISOString()}
 // Do not edit manually — run: npm run generate-data
 
 export const ${varName} = ${JSON.stringify(data, null, 2)}
-` fs.writeFileSync(outputPath, content, 'utf8') log(`  Written: ${outputPath}`)
+`
+  fs.writeFileSync(outputPath, content, 'utf8')
+  log(`  Written: ${outputPath}`)
 }
 
 // ── Ensure placeholder data files exist (prevents build failures) ─────
 const ensurePlaceholder = (outputPath, varName) => {
-if (!fs.existsSync(outputPath)) {
-ensureDir(path.dirname(outputPath))
-writeDataFile(outputPath, varName, [])
-log(`  Created placeholder: ${outputPath}`)
-}
+  if (!fs.existsSync(outputPath)) {
+    ensureDir(path.dirname(outputPath))
+    writeDataFile(outputPath, varName, [])
+    log(`  Created placeholder: ${outputPath}`)
+  }
 }
 
 // ── Main ──────────────────────────────────────────────────────────────
 const run = async () => {
-log(’\n  SOON Production — Data Generator\n’)
+  log('\n  SOON Production — Data Generator\n')
 
-// Always ensure data files exist so builds never fail
-ensurePlaceholder(BEATS_OUTPUT, ‘BEATS’)
-ensurePlaceholder(PHOTOS_OUTPUT, ‘PHOTOS’)
+  // Always ensure data files exist so builds never fail
+  ensurePlaceholder(BEATS_OUTPUT, 'BEATS')
+  ensurePlaceholder(PHOTOS_OUTPUT, 'PHOTOS')
 
-log(’  Processing beats…’)
-const beats = await processBeats()
-if (beats.length) {
-writeDataFile(BEATS_OUTPUT, ‘BEATS’, beats)
-log(`  ${beats.length} beat${beats.length > 1 ? 's' : ''} processed\n`)
-}
+  log('  Processing beats...')
+  const beats = await processBeats()
+  if (beats.length) {
+    writeDataFile(BEATS_OUTPUT, 'BEATS', beats)
+    log(`  ${beats.length} beat${beats.length > 1 ? 's' : ''} processed\n`)
+  }
 
-log(’  Processing photos…’)
-const photos = await processPhotos()
-if (photos.length) {
-writeDataFile(PHOTOS_OUTPUT, ‘PHOTOS’, photos)
-log(`  ${photos.length} photo${photos.length > 1 ? 's' : ''} processed\n`)
-}
+  log('  Processing photos...')
+  const photos = await processPhotos()
+  if (photos.length) {
+    writeDataFile(PHOTOS_OUTPUT, 'PHOTOS', photos)
+    log(`  ${photos.length} photo${photos.length > 1 ? 's' : ''} processed\n`)
+  }
 
-log(’  Done.\n’)
+  log('  Done.\n')
 }
 
 run().catch(console.error)
