@@ -344,7 +344,7 @@ export default function HomePage() {
     return (
     <>
       <AnimatePresence>
-        {!loaded && <Loader key="loader" onDone={() => setLoaded(true)} />}
+        {!loaded && <Loader key="loader" onDone={() => { setLoaded(true); sessionStorage.setItem("soon-loaded", "true"); }} />}
       </AnimatePresence>
 
       {/* ── LATEST DROP BADGE ── */}
