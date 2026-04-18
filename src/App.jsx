@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, lazy, Suspense } from 'react'
 
+// Lazy-load pages
 const HomePage        = lazy(() => import('./pages/HomePage.jsx'))
 const BeatsPage       = lazy(() => import('./pages/BeatsPage.jsx'))
 const PhotographyPage = lazy(() => import('./pages/PhotographyPage.jsx'))
@@ -10,18 +11,21 @@ const PlacementsPage  = lazy(() => import('./pages/PlacementsPage.jsx'))
 const SoundKitsPage   = lazy(() => import('./pages/SoundKitsPage.jsx'))
 const NotFoundPage    = lazy(() => import('./pages/NotFoundPage.jsx'))
 
+// Scroll to top on route change
 const ScrollToTop = () => {
   const { pathname } = useLocation()
   useEffect(() => { window.scrollTo(0, 0) }, [pathname])
   return null
 }
 
+// Branded loading state
 const PageLoader = () => (
   <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
     <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(14px, 2vw, 18px)', letterSpacing: '0.3em', color: 'rgba(122, 112, 96, 0.5)' }}>SOON</div>
   </div>
 )
 
+// Page transition wrapper
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
   animate: { opacity: 1, y: 0 },
@@ -36,6 +40,7 @@ const PageTransition = ({ children }) => (
   </motion.div>
 )
 
+// Routes
 const AnimatedRoutes = () => {
   const location = useLocation()
   return (
